@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>수정</h1>
     <form @submit.prevent="submitForm" enctype="multipart/form-data">
       <table>
         <tr>
@@ -42,6 +43,8 @@
 </template>
 
 <script>
+import restApi from "@/api/restApi";
+
 export default {
   data() {
     return {
@@ -57,24 +60,34 @@ export default {
         password: "",
         contents: "",
       },
+      article: {
+        id: 0,
+        writer: "",
+        title: "",
+        password: "",
+        contents: "",
+      },
     };
   },
-  created() {
+  async created() {
     this.id = this.$route.params.id;
     this.form.id = this.id;
-    this.$store.dispatch("getArticle", this.id);
+    const result = await restApi.get(`/article/${this.id}`);
+    this.article = result.article;
     this.form.contents = this.article.contents;
     this.form.writer = this.article.writer;
     this.form.title = this.article.title;
   },
-  computed: {
-    article() {
-      return this.$store.getters.getArticle;
-    },
-  },
+  computed: {},
   methods: {
-    submitForm() {
-      this.$store.dispatch("putArticle", this.form);
+    async submitForm() {
+      try {
+        await restApi.put(`/article/${this.id}`, this.form);
+        this.$router.push("/boards/free/list");
+      } catch {
+        alert("실패");
+      }
+      // this.$store.dispatch("putArticle", this.form);
     },
     cancel() {
       this.$router.push("/boards/free/list");

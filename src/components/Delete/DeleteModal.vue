@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import restApi from "@/api/restApi";
+
 export default {
   data() {
     return {
@@ -18,9 +20,14 @@ export default {
     };
   },
   methods: {
-    deleteArticle() {
+    async deleteArticle() {
       const id = this.$route.params.id;
-      this.$store.dispatch("deleteArticle", { id: id, password: this.password });
+      try {
+        await restApi.delete(`/article/${id}?password=${this.password}`);
+        this.$router.push("/boards/free/list");
+      } catch {
+        alert("실패");
+      }
     },
     cancel() {
       this.$router.back();

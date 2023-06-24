@@ -20,4 +20,12 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
 </style>
